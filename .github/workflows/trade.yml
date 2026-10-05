@@ -6,6 +6,10 @@ on:
     # 16:30, so GitHub's usual scheduling delays still leave hours to fill. Odd minute on purpose:
     # the top of the hour is when GitHub's scheduler is busiest.
     - cron: "17 13 * * 1-5"
+    # Backups at 14:07 and 14:52 UTC, in case GitHub starts the first run late or drops it
+    # (it happened on 5 Oct 2026). A backup does nothing if an earlier run already traded that day.
+    - cron: "7 14 * * 1-5"
+    - cron: "52 14 * * 1-5"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -44,8 +48,11 @@ jobs:
       DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
       RESET_HALT: ${{ github.event_name == 'workflow_dispatch' && inputs.reset_halt || false }}
       SELL_OTHER_HOLDINGS: ${{ github.event_name == 'workflow_dispatch' && inputs.sell_other_holdings || false }}
+      SCHEDULED: ${{ github.event_name == 'schedule' }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }} # branch tip, so a queued backup sees the state an earlier run saved
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
