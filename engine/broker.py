@@ -11,6 +11,7 @@ timeout or a server error, because the order may already exist.
 from __future__ import annotations
 
 import time
+from datetime import datetime, timezone
 
 import requests
 
@@ -26,6 +27,17 @@ SPACING = {
     "exchanges": 30.5,     # 1 / 30s
     "transactions": 3.1,   # 20 / min
 }
+
+
+def _when(ts):
+    """ISO 8601 text -> aware datetime, or None if missing or unreadable."""
+    if not ts:
+        return None
+    try:
+        t = datetime.fromisoformat(str(ts).replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return t if t.tzinfo else t.replace(tzinfo=timezone.utc)
 
 
 class T212Error(RuntimeError):
@@ -96,16 +108,27 @@ class Trading212:
         return self._call("GET", "/api/v0/equity/metadata/exchanges", "exchanges") or []
 
     def transactions(self, since_iso: str | None, max_pages: int = 40) -> list[dict]:
-        """Deposits, withdrawals, fees and interest since a time, following nextPagePath."""
-        params = {"limit": 50, **({"time": since_iso} if since_iso else {})}
-        page = self._call("GET", "/api/v0/equity/history/transactions", "transactions", params=params)
-        items = list(page.get("items", [])) if page else []
+        """Deposits, withdrawals, fees and interest back to since_iso.
+
+        The live API pages backwards in time through nextPagePath, whose cursor and time
+        parameters must travel together (sending time alone is rejected with a 400). So the first
+        call sends neither, and paging stops once a page reaches back past since_iso."""
+        since = _when(since_iso)
+        page = self._call("GET", "/api/v0/equity/history/transactions", "transactions", params={"limit": 50})
+        items: list[dict] = []
         for _ in range(max_pages):
-            nxt = page.get("nextPagePath") if page else None
-            if not nxt:
+            batch = list((page or {}).get("items") or [])
+            items += batch
+            nxt = (page or {}).get("nextPagePath")
+            if not nxt or not batch:
                 break
-            page = self._call("GET", nxt, "transactions")
-            items += page.get("items", []) if page else []
+            times = [t for t in (_when(i.get("dateTime")) for i in batch) if t]
+            newest_first = len(times) < 2 or times[0] >= times[-1]
+            if since and newest_first and times and min(times) < since:
+                break
+            page = self._call("GET", nxt if nxt.startswith("/") else "/" + nxt, "transactions")
+        if since:
+            items = [i for i in items if (_when(i.get("dateTime")) or since) >= since]
         return items
 
     # ---- writes ------------------------------------------------------------------------------
