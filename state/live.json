@@ -1,14 +1,92 @@
 {
   "derisk": false,
-  "drawdown": 0.0,
+  "drawdown": 0.0014326362496765999,
   "env": "live",
   "last_close": "2026-10-02",
-  "last_orders": [],
-  "last_run": "2026-10-05T11:05:57+00:00",
-  "last_txn_time": "2026-10-05T11:05:57+00:00",
+  "last_orders": [
+    {
+      "note": "switch-over",
+      "quantity": -0.441,
+      "ticker": "3LUS1l_EQ",
+      "value": -62.65,
+      "yahoo": "3LUS1l_EQ"
+    },
+    {
+      "note": "switch-over",
+      "quantity": -0.656,
+      "ticker": "LQQ3l_EQ",
+      "value": -232.2,
+      "yahoo": "LQQ3l_EQ"
+    },
+    {
+      "note": "",
+      "quantity": 1.28,
+      "ticker": "ISFl_EQ",
+      "value": 13.082879687499998,
+      "yahoo": "ISF.L"
+    },
+    {
+      "note": "",
+      "quantity": 0.59,
+      "ticker": "MIDDl_EQ",
+      "value": 13.12455,
+      "yahoo": "MIDD.L"
+    },
+    {
+      "note": "",
+      "quantity": 0.11,
+      "ticker": "VUSAl_EQ",
+      "value": 12.163524932861328,
+      "yahoo": "VUSA.L"
+    },
+    {
+      "note": "",
+      "quantity": 0.02,
+      "ticker": "EQQQl_EQ",
+      "value": 11.38185,
+      "yahoo": "EQQQ.L"
+    },
+    {
+      "note": "",
+      "quantity": 0.28,
+      "ticker": "IEUXl_EQ",
+      "value": 12.884200000000002,
+      "yahoo": "IEUX.L"
+    },
+    {
+      "note": "",
+      "quantity": 0.32,
+      "ticker": "VJPNl_EQ",
+      "value": 12.950400390625001,
+      "yahoo": "VJPN.L"
+    },
+    {
+      "note": "",
+      "quantity": 0.37,
+      "ticker": "VAPXl_EQ",
+      "value": 12.959250564575195,
+      "yahoo": "VAPX.L"
+    },
+    {
+      "note": "",
+      "quantity": 0.2,
+      "ticker": "VFEMl_EQ",
+      "value": 12.555000305175781,
+      "yahoo": "VFEM.L"
+    },
+    {
+      "note": "",
+      "quantity": 7.38,
+      "ticker": "IGLTl_EQ",
+      "value": 70.2022485923767,
+      "yahoo": "IGLT.L"
+    }
+  ],
+  "last_run": "2026-10-05T11:10:49+00:00",
+  "last_txn_time": "2026-10-05T11:10:49+00:00",
   "mode": "core",
   "peak_unit_value": 1.0,
   "seen_refs": [],
-  "unit_value": 1.0,
+  "unit_value": 0.9985673637503234,
   "units": 502.57
 }
