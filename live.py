@@ -1,4 +1,4 @@
-"""Daily live run. GitHub Actions calls this once each weekday during London trading hours.
+do it """Daily live run. GitHub Actions calls this once each weekday during London trading hours.
 
 Safety, in the order it is checked:
   1. T212_ENV is "demo" (paper money) unless it is set to "live".
@@ -131,7 +131,7 @@ def place(broker, order: ex.Order, price: float, cfg, report) -> dict | None:
 
 def run(broker, cfg, *, env: str, trading_enabled: bool, dry_run: bool, reset_halt: bool,
         state_path: str, prices=yahoo_prices, now: datetime | None = None, report=None,
-        sell_other: bool = False) -> dict:
+        sell_other: bool = False, once_per_day: bool = False) -> dict:
     report = report or Report()
     now = now or datetime.now(timezone.utc)
     today = pd.Timestamp(now.astimezone(ex.LONDON).date())
@@ -145,6 +145,13 @@ def run(broker, cfg, *, env: str, trading_enabled: bool, dry_run: bool, reset_ha
     if reset_halt and st.get("halted"):
         report(f"Halt cleared by reset_halt (was: {st.get('halt_reason')}). Drawdown baseline restarts today.")
         st.update(halted=False, halt_reason=None, flattened=False, peak_unit_value=None, derisk=False)
+
+    # A scheduled run stops here if an earlier one already traded today. The workflow has backup
+    # slots because GitHub sometimes starts a scheduled run hours late or not at all.
+    day = str(today.date())
+    if once_per_day and st.get("traded_day") == day:
+        report(f"Already traded today ({day}): this scheduled run is a backup, nothing to do.")
+        return st
 
     # 1. Account, cash flows and guardrails -----------------------------------------------------
     acct = broker.account_summary()
@@ -270,11 +277,12 @@ def run(broker, cfg, *, env: str, trading_enabled: bool, dry_run: bool, reset_ha
         report(f"\nAlso selling {o.ticker}: all {abs(o.quantity):g} shares (~£{abs(o.value):,.2f}), to switch over.")
     turnover = (np.abs(trade).sum() + sum(abs(o.value) for o in other_sells)) / 2 / nav
 
-    placed, failures = [], []
+    placed, failures, done = [], [], False
     if blockers:
         report("\nNo orders today: " + " | ".join(blockers))
     elif not np.any(trade) and not other_sells:
         report("\nNo trades needed today (everything is inside the no-trade band).")
+        done = send
     elif not send:
         report("\nDry run: the trades above were not sent.")
     else:
@@ -285,6 +293,7 @@ def run(broker, cfg, *, env: str, trading_enabled: bool, dry_run: bool, reset_ha
             report(f"\nNo orders today: {len(manual)} order(s) placed outside the bot are pending.")
         else:
             report("\nOrders:")
+            done = True
             for o in pending:
                 broker.cancel_order(o["id"])
                 report(f"- cancelled stale bot order {o.get('id')} ({o.get('ticker')})")
@@ -314,6 +323,8 @@ def run(broker, cfg, *, env: str, trading_enabled: bool, dry_run: bool, reset_ha
                 st["flattened"] = True
 
     # 6. Record -----------------------------------------------------------------------------------
+    if done:
+        st["traded_day"] = day
     st.update(last_run=now.isoformat(timespec="seconds"), env=env, mode=cfg.mode,
               last_orders=[o.__dict__ for o in placed], last_close=str(last_close.date()))
     save_state(state_path, st)
@@ -361,7 +372,7 @@ def _main(args, env: str) -> int:
     try:
         run(broker, Config(), env=env, trading_enabled=flag("TRADING_ENABLED"), dry_run=flag("DRY_RUN"),
             reset_halt=flag("RESET_HALT"), state_path=os.path.join(STATE_DIR, f"{env}.json"), report=report,
-            sell_other=flag("SELL_OTHER_HOLDINGS"))
+            sell_other=flag("SELL_OTHER_HOLDINGS"), once_per_day=flag("SCHEDULED"))
     finally:
         report.flush_summary()
     return 0
