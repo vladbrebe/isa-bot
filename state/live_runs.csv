@@ -1,0 +1,2 @@
+time_utc,mode,account_gbp,net_deposits_gbp,unit_value,drawdown,derisk,halted,orders_sent,turnover,blocked
+2026-10-05T11:05:57+00:00,core,502.57,0.0,1.0,0.0,False,False,0,0.0,
