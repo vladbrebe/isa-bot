@@ -1,4 +1,4 @@
-do it """Daily live run. GitHub Actions calls this once each weekday during London trading hours.
+"""Daily live run. GitHub Actions calls this once each weekday during London trading hours.
 
 Safety, in the order it is checked:
   1. T212_ENV is "demo" (paper money) unless it is set to "live".
