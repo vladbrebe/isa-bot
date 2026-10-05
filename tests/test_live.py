@@ -263,3 +263,15 @@ def test_old_bot_holdings_left_alone_unless_switching_over(cfg, tmp_path):
     assert b.qty["OLDl_EQ"] == 0 and b.orders[n] == ("OLDl_EQ", -10.0)  # sold first, in full
     assert all(q > 0 for t, q in b.orders[n + 1:])                      # then the core is bought
     assert abs(b.account_summary()["totalValue"] - 500.0) < 1e-6
+
+def test_backup_runs_skip_once_traded_today(cfg, tmp_path):
+    b = FakeT212()
+    go(b, cfg, tmp_path, now=NOW.replace(hour=6), once_per_day=True)  # before the open: nothing
+    assert not b.orders
+    go(b, cfg, tmp_path, once_per_day=True)  # a backup during market hours trades
+    n = len(b.orders)
+    assert n
+    go(b, cfg, tmp_path, now=NOW + timedelta(minutes=50), once_per_day=True)  # later backup skips
+    assert len(b.orders) == n
+    go(b, cfg, tmp_path, now=NOW + timedelta(days=1), once_per_day=True)  # next day trades again
+    assert len(b.orders) > n
