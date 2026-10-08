@@ -1,14 +1,14 @@
 {
   "derisk": false,
-  "drawdown": 0.0027458861452135386,
+  "drawdown": 0.004576476908689342,
   "env": "live",
-  "last_close": "2026-10-05",
+  "last_close": "2026-10-06",
   "last_orders": [],
-  "last_run": "2026-10-07T20:14:05+00:00",
-  "last_txn_time": "2026-10-07T20:14:05+00:00",
+  "last_run": "2026-10-08T19:19:20+00:00",
+  "last_txn_time": "2026-10-08T19:19:20+00:00",
   "mode": "core",
   "peak_unit_value": 1.0,
   "seen_refs": [],
-  "unit_value": 0.9972541138547865,
+  "unit_value": 0.9954235230913107,
   "units": 502.57
 }
