@@ -12,3 +12,4 @@ time_utc,mode,account_gbp,net_deposits_gbp,unit_value,drawdown,derisk,halted,ord
 2026-10-08T20:16:00+00:00,core,500.27,0.0,0.995424,0.0046,False,False,0,0.0,London market not open (London Stock Exchange: last event CLOSE)
 2026-10-09T18:51:54+00:00,core,500.85,0.0,0.996578,0.0034,False,False,0,0.0,London market not open (London Stock Exchange: last event CLOSE)
 2026-10-09T19:29:05+00:00,core,500.85,0.0,0.996578,0.0034,False,False,0,0.0,London market not open (London Stock Exchange: last event CLOSE)
+2026-10-09T19:51:57+00:00,core,500.85,0.0,0.996578,0.0034,False,False,0,0.0,London market not open (London Stock Exchange: last event CLOSE)
