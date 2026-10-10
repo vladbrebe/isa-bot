@@ -2,14 +2,12 @@ name: Trade
 
 on:
   schedule:
-    # 13:17 UTC on weekdays: 14:17 London time in summer, 13:17 in winter. The LSE closes at
-    # 16:30, so GitHub's usual scheduling delays still leave hours to fill. Odd minute on purpose:
-    # the top of the hour is when GitHub's scheduler is busiest.
-    - cron: "17 13 * * 1-5"
-    # Backups at 14:07 and 14:52 UTC, in case GitHub starts the first run late or drops it
-    # (it happened on 5 Oct 2026). A backup does nothing if an earlier run already traded that day.
-    - cron: "7 14 * * 1-5"
-    - cron: "52 14 * * 1-5"
+    # Every hour from 07:17 to 13:17 UTC on weekdays: 08:17 to 14:17 London time in summer,
+    # 07:17 to 13:17 in winter (the LSE is open 08:00 to 16:30 London time). GitHub has started
+    # scheduled runs up to 6 hours late, so the slots start early: the first one that lands while
+    # the market is open trades, and the later ones see that and do nothing.
+    # Odd minute on purpose: the top of the hour is when GitHub's scheduler is busiest.
+    - cron: "17 7-13 * * 1-5"
   workflow_dispatch:
     inputs:
       dry_run:
