@@ -1,79 +1,23 @@
 {
   "derisk": false,
-  "drawdown": 0.003800465606781045,
+  "drawdown": 0.007799908470461858,
   "env": "live",
-  "last_close": "2026-10-12",
+  "last_close": "2026-10-13",
   "last_orders": [
     {
       "note": "",
-      "quantity": 0.52,
-      "ticker": "ISFl_EQ",
-      "value": 5.4038243999999995,
-      "yahoo": "ISF.L"
-    },
-    {
-      "note": "",
-      "quantity": 0.24,
-      "ticker": "MIDDl_EQ",
-      "value": 5.3939520000000005,
-      "yahoo": "MIDD.L"
-    },
-    {
-      "note": "",
-      "quantity": 0.05,
-      "ticker": "VUSAl_EQ",
-      "value": 5.579740000000001,
-      "yahoo": "VUSA.L"
-    },
-    {
-      "note": "",
-      "quantity": 0.01,
-      "ticker": "EQQQl_EQ",
-      "value": 5.6254998,
-      "yahoo": "EQQQ.L"
-    },
-    {
-      "note": "",
-      "quantity": 0.12,
-      "ticker": "IEUXl_EQ",
-      "value": 5.5002012,
-      "yahoo": "IEUX.L"
-    },
-    {
-      "note": "",
-      "quantity": 0.14,
-      "ticker": "VJPNl_EQ",
-      "value": 5.542600000000001,
-      "yahoo": "VJPN.L"
-    },
-    {
-      "note": "",
-      "quantity": 0.18,
-      "ticker": "VAPXl_EQ",
-      "value": 5.765759999999999,
-      "yahoo": "VAPX.L"
-    },
-    {
-      "note": "",
-      "quantity": 0.09,
-      "ticker": "VFEMl_EQ",
-      "value": 5.554799999999999,
-      "yahoo": "VFEM.L"
-    },
-    {
-      "note": "",
-      "quantity": 3.1,
+      "quantity": 1.93,
       "ticker": "IGLTl_EQ",
-      "value": 29.50394,
+      "value": 18.489978999999998,
       "yahoo": "IGLT.L"
     }
   ],
-  "last_run": "2026-10-14T12:52:40+00:00",
-  "last_txn_time": "2026-10-14T12:52:40+00:00",
+  "last_run": "2026-10-15T12:39:08+00:00",
+  "last_txn_time": "2026-10-15T12:39:08+00:00",
   "mode": "core",
   "peak_unit_value": 1.0,
   "seen_refs": [],
-  "traded_day": "2026-10-14",
-  "unit_value": 0.996199534393219,
+  "traded_day": "2026-10-15",
+  "unit_value": 0.9922000915295381,
   "units": 502.57
 }
