@@ -1,23 +1,23 @@
 {
   "derisk": false,
-  "drawdown": 0.007799908470461858,
+  "drawdown": 0.006924408540103899,
   "env": "live",
-  "last_close": "2026-10-13",
+  "last_close": "2026-10-14",
   "last_orders": [
     {
       "note": "",
-      "quantity": 1.93,
+      "quantity": 1.3,
       "ticker": "IGLTl_EQ",
-      "value": 18.489978999999998,
+      "value": 12.402260000000002,
       "yahoo": "IGLT.L"
     }
   ],
-  "last_run": "2026-10-15T12:39:08+00:00",
-  "last_txn_time": "2026-10-15T12:39:08+00:00",
+  "last_run": "2026-10-16T12:24:17+00:00",
+  "last_txn_time": "2026-10-16T12:24:17+00:00",
   "mode": "core",
   "peak_unit_value": 1.0,
   "seen_refs": [],
-  "traded_day": "2026-10-15",
-  "unit_value": 0.9922000915295381,
+  "traded_day": "2026-10-16",
+  "unit_value": 0.9930755914598961,
   "units": 502.57
 }
