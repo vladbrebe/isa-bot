@@ -117,20 +117,55 @@ def _round_down(x: float, decimals: int) -> float:
     return math.floor(abs(x) * f + 1e-9) / f * (1 if x >= 0 else -1)
 
 
+def _round_up(x: float, decimals: int) -> float:
+    f = 10 ** decimals
+    return math.ceil(abs(x) * f - 1e-9) / f * (1 if x >= 0 else -1)
+
+
+def _shares(gbp: float, price: float, cfg, cap: float | None = None) -> float:
+    """Share quantity for a trade of about `gbp` pounds, in steps of 10**-qty_decimals shares.
+
+    Rounds down, unless that falls below the minimum order: then one step up, if that costs at
+    most twice the plan (0.01 shares of a £560 ETF is £5.60, so a planned £5.43 buy is
+    possible only by rounding up). Returns 0 if no allowed quantity reaches the minimum."""
+    q = _round_down(gbp / price, cfg.qty_decimals)
+    if q * price < cfg.min_order_gbp * 0.999:
+        up = _round_up(gbp / price, cfg.qty_decimals)
+        if up * price <= 2 * gbp:
+            q = up
+    if cap is not None:
+        q = min(q, _round_down(cap, cfg.qty_decimals))
+    return q if q * price >= cfg.min_order_gbp * 0.999 else 0.0
+
+
 def plan_trades(tickers: list[str], value: np.ndarray, nav: float, target: np.ndarray, cfg,
                 frozen: np.ndarray, other_value: float = 0.0) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """The backtest's trade rule on the real account. Returns (current weights, new weights,
-    trade in pounds). Frozen assets are not traded. Trades below min_order_gbp are dropped."""
+    trade in pounds). Frozen assets are not traded.
+
+    Two live-only adjustments, because real orders have a minimum size:
+    * the no-trade band is never smaller than the minimum order, so every trade the rule plans
+      can actually be placed (on a £499 account, 1% is £4.99, under the £5 minimum);
+    * a trade that would leave a remainder smaller than the band closes the whole gap instead.
+      Such a remainder could never be traded, and across 9 funds they add up to idle cash."""
     h = value / nav
     budget = max(0.0, 1.0 - other_value / nav)      # holdings outside the universe are left alone
-    new = rebalance(h, np.nan_to_num(target), cfg.trade_rate, cfg.no_trade_band, budget)
+    tgt = np.nan_to_num(target)
+    band = max(cfg.no_trade_band, cfg.min_order_gbp / nav)
+    new = rebalance(h, tgt, cfg.trade_rate, band, budget)
+    gap, step = tgt - h, new - h
+    stub = (step != 0) & (np.sign(step) == np.sign(gap)) & (np.abs(gap - step) < band)
+    new = np.where(stub, tgt, new)
+    if new.sum() > budget:                          # never plan to spend more than the account has
+        buys = np.clip(new - h, 0, None)
+        new = new - buys * min(1.0, (new.sum() - budget) / max(buys.sum(), 1e-12))
     new = np.where(frozen, h, new)
     dw = new - h
     turnover = np.abs(dw).sum() / 2
     if turnover > cfg.max_turnover_per_run:
         dw *= cfg.max_turnover_per_run / turnover
     trade = dw * nav
-    trade[np.abs(trade) < cfg.min_order_gbp] = 0.0
+    trade[np.abs(trade) < cfg.min_order_gbp * 0.999] = 0.0
     return h, h + trade / nav, trade
 
 
@@ -145,8 +180,7 @@ def sell_orders(tickers, tmap, trade, new_w, qty_avail, price_gbp, cfg) -> list[
         if new_w[i] <= 1e-4:                                     # exiting: sell all, leave no dust
             q, note = -held, "exit"
         else:
-            q, note = _round_down(trade[i] / price_gbp[i], cfg.qty_decimals), ""
-            q = max(q, -held)
+            q, note = -_shares(-trade[i], price_gbp[i], cfg, cap=held), ""
         if q != 0 and abs(q) * price_gbp[i] >= cfg.min_order_gbp * 0.999:
             out.append(Order(y, tmap[y], q, q * price_gbp[i], note))
     return out
@@ -158,13 +192,17 @@ def buy_orders(tickers, tmap, trade, cash_free, nav, price_gbp, cfg) -> list[Ord
     room = max(0.0, cash_free - cfg.cash_buffer * nav)
     if want.sum() > room:
         want = want * (room / want.sum()) if want.sum() > 0 else want
-    out = []
+    out, spent = [], 0.0
     for i, y in enumerate(tickers):
-        if want[i] < cfg.min_order_gbp:
+        if want[i] < cfg.min_order_gbp * 0.999:
             continue
-        q = _round_down(want[i] / price_gbp[i], cfg.qty_decimals)
-        if q > 0 and q * price_gbp[i] >= cfg.min_order_gbp * 0.999:
+        q = _shares(want[i], price_gbp[i], cfg)
+        if q > 0 and spent + q * price_gbp[i] > room + 1e-9:     # rounding up must still fit the cash
+            q = _round_down(min(want[i], room - spent) / price_gbp[i], cfg.qty_decimals)
+            q = q if q * price_gbp[i] >= cfg.min_order_gbp * 0.999 else 0.0
+        if q > 0:
             out.append(Order(y, tmap[y], q, q * price_gbp[i]))
+            spent += q * price_gbp[i]
     return out
 
 
