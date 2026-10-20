@@ -1,79 +1,72 @@
 {
   "derisk": false,
-  "drawdown": 0.009710090136697325,
+  "drawdown": 0.015460532861093945,
   "env": "live",
-  "last_close": "2026-10-16",
+  "last_close": "2026-10-19",
   "last_orders": [
-    {
-      "note": "",
-      "quantity": 0.94,
-      "ticker": "ISFl_EQ",
-      "value": 9.8361882,
-      "yahoo": "ISF.L"
-    },
     {
       "note": "",
       "quantity": 0.23,
       "ticker": "MIDDl_EQ",
-      "value": 5.154346,
+      "value": 5.119777,
       "yahoo": "MIDD.L"
     },
     {
       "note": "",
-      "quantity": 0.05,
+      "quantity": 0.06,
       "ticker": "VUSAl_EQ",
-      "value": 5.48086,
+      "value": 6.5257320000000005,
       "yahoo": "VUSA.L"
     },
     {
       "note": "",
       "quantity": 0.01,
       "ticker": "EQQQl_EQ",
-      "value": 5.4317997,
+      "value": 5.3751002,
       "yahoo": "EQQQ.L"
     },
     {
       "note": "",
-      "quantity": 0.11,
+      "quantity": 0.12,
       "ticker": "IEUXl_EQ",
-      "value": 5.029747799999999,
+      "value": 5.446202400000001,
       "yahoo": "IEUX.L"
     },
     {
       "note": "",
-      "quantity": 0.13,
+      "quantity": 0.16,
       "ticker": "VJPNl_EQ",
-      "value": 5.0596000000000005,
+      "value": 6.1390400000000005,
       "yahoo": "VJPN.L"
     },
     {
       "note": "",
-      "quantity": 0.16,
+      "quantity": 0.23,
       "ticker": "VAPXl_EQ",
-      "value": 5.01184,
+      "value": 7.01592,
       "yahoo": "VAPX.L"
     },
     {
       "note": "",
-      "quantity": 0.09,
+      "quantity": 0.1,
       "ticker": "VFEMl_EQ",
-      "value": 5.4063,
+      "value": 5.931000000000001,
       "yahoo": "VFEM.L"
     },
     {
       "note": "",
-      "quantity": 0.84,
+      "quantity": 0.53,
       "ticker": "IGLTl_EQ",
-      "value": 7.996548,
+      "value": 5.049628,
       "yahoo": "IGLT.L"
     }
   ],
-  "last_run": "2026-10-19T14:39:48+00:00",
-  "last_txn_time": "2026-10-19T14:39:48+00:00",
+  "last_run": "2026-10-20T12:43:10+00:00",
+  "last_txn_time": "2026-10-20T12:43:10+00:00",
   "mode": "core",
   "peak_unit_value": 1.0,
   "seen_refs": [],
-  "traded_day": "2026-10-19",
-  "unit_value": 0.9902899098633027,
+  "traded_day": "2026-10-20",
+  "unit_value": 0.984539467138906,
   "units": 502.57
 }
