@@ -24,3 +24,4 @@ time_utc,mode,account_gbp,net_deposits_gbp,unit_value,drawdown,derisk,halted,ord
 2026-10-22T12:58:08+00:00,core,496.58,0.0,0.988081,0.0119,False,False,0,0.0,
 2026-10-23T12:37:15+00:00,core,494.28,0.0,0.983505,0.0165,False,False,0,0.0,
 2026-10-26T14:15:10+00:00,core,496.99,0.0,0.988897,0.0111,False,False,0,0.0,
+2026-10-27T13:11:25+00:00,core,498.77,0.0,0.992439,0.0076,False,False,0,0.0,
