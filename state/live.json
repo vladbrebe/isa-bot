@@ -1,23 +1,15 @@
 {
   "derisk": false,
-  "drawdown": 0.011958533139662109,
+  "drawdown": 0.005113715502318095,
   "env": "live",
-  "last_close": "2026-11-09",
-  "last_orders": [
-    {
-      "note": "",
-      "quantity": 0.01,
-      "ticker": "EQQQl_EQ",
-      "value": 5.0810997,
-      "yahoo": "EQQQ.L"
-    }
-  ],
-  "last_run": "2026-11-10T15:34:21+00:00",
-  "last_txn_time": "2026-11-10T15:34:21+00:00",
+  "last_close": "2026-11-10",
+  "last_orders": [],
+  "last_run": "2026-11-11T15:09:51+00:00",
+  "last_txn_time": "2026-11-11T15:09:51+00:00",
   "mode": "core",
   "peak_unit_value": 1.0,
   "seen_refs": [],
-  "traded_day": "2026-11-10",
-  "unit_value": 0.9880414668603379,
+  "traded_day": "2026-11-11",
+  "unit_value": 0.9948862844976819,
   "units": 502.57
 }
